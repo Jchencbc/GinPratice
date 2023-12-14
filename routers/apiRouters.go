@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"ginPratice/controllers/api"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,7 +15,7 @@ func ApiRoutersInit(r *gin.Engine) {
 				"str": "这是一个测试接口",
 			})
 		})
-		// apiRouters.POST("/submit", submitEndpoint)
+		apiRouters.POST("/file/upload", api.FileController{}.FileUpload) //文件上传接口
 		// apiRouters.POST("/read", readEndpoint)
 	}
 }

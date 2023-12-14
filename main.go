@@ -7,12 +7,14 @@ import (
 )
 
 func main() {
-	router := gin.Default()
+	router := gin.Default() //默认路由引擎
+
+	// router.Use() //全局中间件配置
 
 	// 用户路由注册
 	routers.AccountRoutersInit(router)
 
-	// 简单的路由组: v2
+	//
 	routers.ApiRoutersInit(router)
 
 	router.Run(":8000")
