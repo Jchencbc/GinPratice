@@ -4,7 +4,6 @@ import (
 	"ginPratice/utils"
 	"net/http"
 	"os"
-	"path"
 	"strconv"
 	"strings"
 	"time"
@@ -23,22 +22,26 @@ func (con FileController) FileUpload(ctx *gin.Context) {
 		savePath      = ""
 	)
 
-	file, err := ctx.FormFile(uploadFileKey)
+	// file, err := ctx.FormFile(uploadFileKey)
+	formData, err := ctx.MultipartForm()
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"success": false,
 			"message": "上传文件失败",
 		})
 	}
-	extstring := path.Ext(file.Filename)
-	fileNameInt := time.Now().Unix()
-	fileNameStr := strconv.FormatInt(fileNameInt, 10)
-	saveName = fileNameStr + extstring
 
-	//保存上传文件
-	savePath = utils.Mkdir(saveDir) + "/" + saveName
+	files := formData.File[uploadFileKey]
+	for _, file := range files {
+		// extstring := path.Ext(file.Filename)
+		fileNameInt := time.Now().Unix()
+		fileNameStr := strconv.FormatInt(fileNameInt, 10)
+		saveName = fileNameStr + file.Filename
 
-	ctx.SaveUploadedFile(file, savePath)
+		//保存上传文件
+		savePath = utils.Mkdir(saveDir) + "/" + saveName
+		ctx.SaveUploadedFile(file, savePath)
+	}
 	ctx.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
 		"message": "success",
