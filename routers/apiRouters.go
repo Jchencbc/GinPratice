@@ -15,7 +15,8 @@ func ApiRoutersInit(r *gin.Engine) {
 				"str": "这是一个测试接口",
 			})
 		})
-		apiRouters.POST("/file/upload", api.FileController{}.FileUpload) //文件上传接口
+		apiRouters.POST("/file/upload", api.FileController{}.FileUpload)    //文件上传接口
+		apiRouters.GET("/file/download", api.FileController{}.FileDownload) //文件下载接口
 		// apiRouters.POST("/read", readEndpoint)
 	}
 }
