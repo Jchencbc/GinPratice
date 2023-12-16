@@ -1,8 +1,10 @@
 package account
 
 import (
+	"ginPratice/middlewares"
 	"net/http"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,8 +17,22 @@ func (con AccountController) CreateAccount(ctx *gin.Context) {
 	})
 }
 
-func (con AccountController) TokenRefresh(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{
-		"str": "token 刷新接口",
+func (con AccountController) Login(c *gin.Context) {
+	//校验密码逻辑
+
+	c.JSON(http.StatusOK, gin.H{
+		"token": middlewares.GenerateToken(&middlewares.UserClaims{
+			ID:             "001",
+			Name:           "张三",
+			StandardClaims: jwt.StandardClaims{},
+		}),
+	})
+}
+
+func (con AccountController) UserInfo(c *gin.Context) {
+	user, _ := c.Get("user")
+	claims := user.(*middlewares.UserClaims)
+	c.JSON(http.StatusOK, gin.H{
+		"name": claims.Name,
 	})
 }

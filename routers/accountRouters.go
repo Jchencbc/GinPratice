@@ -30,7 +30,7 @@ func AccountRoutersInit(r *gin.Engine) {
 	apiRouters := r.Group("/account")
 	apiRouters.Use(middlewares.InitMiddleware)
 	{
-		apiRouters.POST("/login", initMiddlewareTest, func(ctx *gin.Context) {
+		apiRouters.POST("/test", initMiddlewareTest, func(ctx *gin.Context) {
 
 			fmt.Println("login接口使用")
 			username, _ := ctx.Get("username") //接受中间件传递的值
@@ -45,7 +45,8 @@ func AccountRoutersInit(r *gin.Engine) {
 				})
 			}
 		})
-		apiRouters.POST("/create", account.AccountController{}.CreateAccount)       // 创建用户
-		apiRouters.POST("/token/refresh", account.AccountController{}.TokenRefresh) // token刷新
+		apiRouters.POST("/create", account.AccountController{}.CreateAccount) // 创建用户
+		apiRouters.POST("/login", account.AccountController{}.Login)          // 用户登录
+		apiRouters.GET("/userInfo", account.AccountController{}.UserInfo)     // 用户登录
 	}
 }
