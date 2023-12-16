@@ -9,7 +9,7 @@ import (
 
 // 用户信息类，作为生成token的参数
 type UserClaims struct {
-	ID   string `json:"userId"`
+	ID   uint   `json:"userId"`
 	Name string `json:"name"`
 	// Phone string `json:"phone"`
 	//jwt-go提供的标准claim
