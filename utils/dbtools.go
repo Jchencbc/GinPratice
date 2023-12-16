@@ -1,6 +1,9 @@
 package utils
 
 import (
+	"fmt"
+
+	"gopkg.in/ini.v1"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -8,21 +11,20 @@ import (
 var DB *gorm.DB
 
 func InitDB() *gorm.DB {
-	// driverName := "mysql"
-	// host := "139.196.100.132"
-	// port := "3306"
-	// database := "research_platform_go"
-	// username := "qinghua"
-	// password := "qinghua"
-	// charset := "utf8mb4"
-	// args := fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=%s&parseTime=true",
-	// 	username,
-	// 	password,
-	// 	host,
-	// 	port,
-	// 	database,
-	// 	charset)
-	dsn := "root:jB5OgGyIIBO@tcp(1.94.40.252:3306)/research_platform_go?charset=utf8mb4&parseTime=True&loc=Local"
+	cfg, _ := ini.Load("../config/app.ini")
+	host := cfg.Section("Mysql").Key("host").String()
+	port := cfg.Section("Mysql").Key("port").String()
+	database := cfg.Section("Mysql").Key("database").String()
+	username := cfg.Section("Mysql").Key("username").String()
+	password := cfg.Section("Mysql").Key("password").String()
+	charset := cfg.Section("Mysql").Key("charset").String()
+	dsn := fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=%s&parseTime=true",
+		username,
+		password,
+		host,
+		port,
+		database,
+		charset)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database, err:" + err.Error())
