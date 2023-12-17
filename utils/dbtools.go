@@ -25,10 +25,10 @@ func InitDB() *gorm.DB {
 		port,
 		database,
 		charset)
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	DB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database, err:" + err.Error())
 	}
-	// db.AutoMigrate(&models.User{})
-	return db
+	// db.AutoMigrate(&models.User{}) //迁移model层
+	return DB
 }

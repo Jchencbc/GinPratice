@@ -17,7 +17,6 @@ type AccountController struct {
 }
 
 func (con AccountController) CreateAccount(ctx *gin.Context) {
-	db := utils.InitDB()
 	name := ctx.PostForm("name")
 	telephone := ctx.PostForm("telephone")
 	password := ctx.PostForm("password")
@@ -32,17 +31,16 @@ func (con AccountController) CreateAccount(ctx *gin.Context) {
 		Password:    string(hasedPassword),
 		IsSuperuser: int8(IsSuperuser),
 	}
-	db.Create(&newUser)
+	utils.DB.Create(&newUser)
 	utils.Ok(ctx)
 }
 
 func (con AccountController) Login(c *gin.Context) {
 	//校验密码逻辑
-	db := utils.InitDB()
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 	var user models.User
-	db.Where("name = ?", username).First(&user)
+	utils.DB.Where("name = ?", username).First(&user)
 	if user.ID == 0 {
 		utils.Fail(c, utils.UserExist)
 		return
