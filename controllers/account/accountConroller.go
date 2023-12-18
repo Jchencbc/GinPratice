@@ -1,6 +1,7 @@
 package account
 
 import (
+	"fmt"
 	"ginPratice/middlewares"
 	"ginPratice/models"
 	"ginPratice/utils"
@@ -22,9 +23,18 @@ func (con AccountController) CreateAccount(ctx *gin.Context) {
 	telephone := ctx.PostForm("telephone")
 	password := ctx.PostForm("password")
 	IsSuperuser, err := strconv.Atoi(ctx.PostForm("isSuperuser"))
+
+	//密码强度校验
+	pass_check_err := utils.CheckPassword(6, 10, 4, password)
+	if pass_check_err != nil {
+		utils.Fail(ctx, utils.InvalidArgs)
+		return
+	}
+
 	hasedPassword, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		utils.Fail(ctx, utils.UserError)
+		return
 	}
 	newUser := models.User{
 		Name:        name,
@@ -57,6 +67,20 @@ func (con AccountController) Login(c *gin.Context) {
 			StandardClaims: jwt.StandardClaims{},
 		}),
 	})
+}
+
+func (con AccountController) TokenRefresh(c *gin.Context) {
+	//token 刷新接口
+	userInfo, _ := c.Get("user") //token解析的userInfo
+	fmt.Println(userInfo)
+	// token := c.PostForm("token")
+	token := c.GetHeader("token") //拿去请求头token
+	refreshToken := middlewares.Refresh(token)
+	c.JSON(http.StatusOK, gin.H{
+
+		"refreshToken": refreshToken,
+	})
+
 }
 
 func (con AccountController) UserInfo(c *gin.Context) {

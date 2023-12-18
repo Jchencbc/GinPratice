@@ -11,6 +11,7 @@ func AccountRoutersInit(r *gin.Engine) {
 	apiRouters := r.Group("/account")
 	apiRouters.Use(middlewares.JwtVerify)
 	{
-		apiRouters.GET("/userInfo", account.AccountController{}.UserInfo) // 用户信息获取
+		apiRouters.POST("/refresh", account.AccountController{}.TokenRefresh) // token刷新
+		apiRouters.GET("/userInfo", account.AccountController{}.UserInfo)     // 用户信息获取
 	}
 }
