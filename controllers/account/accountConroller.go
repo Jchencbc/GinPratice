@@ -1,6 +1,7 @@
 package account
 
 import (
+	"encoding/json"
 	"fmt"
 	"ginPratice/middlewares"
 	"ginPratice/models"
@@ -43,7 +44,8 @@ func (con AccountController) CreateAccount(ctx *gin.Context) {
 		IsSuperuser: int8(IsSuperuser),
 	}
 	db.Create(&newUser)
-	utils.Ok(ctx)
+	userByte, _ := json.Marshal(newUser)
+	utils.OkWithData(ctx, utils.OK, string(userByte))
 }
 
 func (con AccountController) Login(c *gin.Context) {
@@ -61,6 +63,8 @@ func (con AccountController) Login(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
+		"userID":   user.ID,
+		"userName": user.Name,
 		"token": middlewares.GenerateToken(&middlewares.UserClaims{
 			ID:             user.ID,
 			Name:           user.Name,
@@ -88,5 +92,6 @@ func (con AccountController) UserInfo(c *gin.Context) {
 	claims := user.(*middlewares.UserClaims)
 	c.JSON(http.StatusOK, gin.H{
 		"name": claims.Name,
+		"id":   claims.ID,
 	})
 }

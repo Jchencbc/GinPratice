@@ -4,9 +4,7 @@ import (
 	"ginPratice/utils"
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,30 +15,16 @@ type FileController struct {
 func (con FileController) FileUpload(ctx *gin.Context) {
 	var (
 		uploadFileKey = "file"
-		saveDir       = "static/files"
-		saveName      = ""
-		savePath      = ""
 	)
-
-	// file, err := ctx.FormFile(uploadFileKey)
-	formData, err := ctx.MultipartForm()
-	if err != nil {
+	formData, _ := ctx.MultipartForm()
+	files := formData.File[uploadFileKey]
+	_, error := utils.FileUploadTools(files)
+	if error != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"success": false,
 			"message": "上传文件失败",
 		})
-	}
-
-	files := formData.File[uploadFileKey]
-	for _, file := range files {
-		// extstring := path.Ext(file.Filename)
-		fileNameInt := time.Now().Unix()
-		fileNameStr := strconv.FormatInt(fileNameInt, 10)
-		saveName = fileNameStr + file.Filename
-
-		//保存上传文件
-		savePath = utils.Mkdir(saveDir) + "/" + saveName
-		ctx.SaveUploadedFile(file, savePath)
+		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,

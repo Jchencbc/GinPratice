@@ -10,7 +10,11 @@ import (
 )
 
 func main() {
-	router := gin.Default()                //默认路由引擎
+	router := gin.Default() //默认路由引擎
+
+	// db := utils.InitDB()
+	// db.AutoMigrate(&models.User{}, &models.Message{}, &models.UserInfo{})
+
 	router.Use(middlewares.InitMiddleware) //全局中间件配置
 	router.Use(middlewares.Cors())         //解决跨域
 	router.GET("/test", func(ctx *gin.Context) {

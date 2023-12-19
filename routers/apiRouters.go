@@ -17,6 +17,7 @@ func ApiRoutersInit(r *gin.Engine) {
 		})
 		apiRouters.POST("/file/upload", api.FileController{}.FileUpload)    //文件上传接口
 		apiRouters.GET("/file/download", api.FileController{}.FileDownload) //文件下载接口
+		apiRouters.POST("/message/up", api.MessageController{}.MsgUp)       //消息发布
 		// apiRouters.POST("/read", readEndpoint)
 	}
 }
