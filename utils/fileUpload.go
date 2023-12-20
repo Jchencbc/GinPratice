@@ -29,7 +29,6 @@ func FileUploadTools(files []*multipart.FileHeader) ([]string, error) {
 		}
 		defer out.Close()
 		_, err = io.Copy(out, src)
-		return nil, err
 	}
 	return filePaths, nil
 }

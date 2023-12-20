@@ -2,6 +2,7 @@ package routers
 
 import (
 	"ginPratice/controllers/api"
+	"ginPratice/middlewares"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,6 +10,7 @@ import (
 
 func ApiRoutersInit(r *gin.Engine) {
 	apiRouters := r.Group("/api")
+	apiRouters.Use(middlewares.JwtVerify)
 	{
 		apiRouters.GET("/test", func(ctx *gin.Context) {
 			ctx.JSON(http.StatusOK, gin.H{
